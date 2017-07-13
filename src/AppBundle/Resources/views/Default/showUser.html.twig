@@ -1,0 +1,141 @@
+{% extends 'FOSUserBundle::layout.html.twig' %}
+
+{% block body_id 'page-boxed page-header-fixed page-container-bg-solid page-sidebar-closed-hide-logo' %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="page-container">
+            {% if is_granted('ROLE_ADMIN') %}
+                <!-- BEGIN SIDEBAR -->
+                <div class="page-sidebar-wrapper">
+                    <div class="page-sidebar navbar-collapse collapse">
+                        <ul class="page-sidebar-menu page-sidebar-menu-hover-submenu " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+                            <li>
+                                <a href="{{ path('createUser') }}">
+                                    <i class="icon-user"></i>
+                                    <span class="title">Создать новый пользователь</span>
+                                    <span class="arrow "></span>
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- END SIDEBAR MENU -->
+                    </div>
+                </div>
+                <!-- END SIDEBAR -->
+            {% endif %}
+
+            <div class="page-content-wrapper">
+                <div class="page-content">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <!-- BEGIN SAMPLE FORM PORTLET-->
+                            <div class="portlet box green ">
+                                <div class="portlet-title">
+                                    <div class="caption">
+                                        <i class="fa fa-gift"></i> Форма пользователя
+                                    </div>
+                                </div>
+                                <div class="portlet-body form">
+                                    <form action="{{ path('updateUser', {'id': user.id }) }}" class="form-horizontal" role="form" method="post">
+                                        <div class="form-body">
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">E-Mail:</label>
+                                                <div class="col-md-9">
+                                                    <input type="text" class="form-control" name="email" value="{{ user.email }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-body">
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Логин:</label>
+                                                <div class="col-md-9">
+                                                    <input type="text" class="form-control" name="username" value="{{ user.username }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-body">
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Имя:</label>
+                                                <div class="col-md-9">
+                                                    <input type="text" class="form-control" name="firstName" value="{{ user.firstName }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-body">
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Фамилия:</label>
+                                                <div class="col-md-9">
+                                                    <input type="text" class="form-control" name="lastName" value="{{ user.lastName }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">Пол</label>
+                                            <div class="col-md-9">
+                                                <div class="radio-list">
+                                                    <label>
+                                                        <input type="radio" name="gender" value="male" {% if user.gender == 'male' %}checked{% endif %}>&nbsp;Male
+                                                    </label>
+
+                                                    <label>
+                                                        <input type="radio" name="gender" value="female" {% if user.gender == 'female' %}checked{% endif %}>&nbsp;Female
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-body">
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">День рождения:</label>
+                                                <div class="col-md-3">
+
+                                                    <div class="input-group date datetime-picker margin-bottom-5" data-date-format="dd/mm/yyyy hh:ii">
+                                                        <input type="text" class="form-control form-filter input-sm" value="{{ user.birthday|date('d/m/Y h:i') }}" name="birthday" placeholder="Дата день рождения">
+                                                        <span class="input-group-btn">
+																<button class="btn btn-sm default date-set" type="button"><i class="fa fa-calendar"></i></button>
+																</span>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-actions">
+                                            <div class="row">
+                                                <div class="col-md-offset-3 col-md-9">
+                                                    <button type="submit" class="btn green">Обновить</button>
+                                                    <a href="{{ path('homepage') }}" type="button" class="btn default">Отменить</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- END SAMPLE FORM PORTLET-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="{{ asset('public/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js') }}"></script>
+    <script src="{{ asset('public/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js') }}"></script>
+    <script src="{{ asset('public/global/plugins/plupload/js/plupload.full.min.js') }}" type="text/javascript"></script>
+
+    <script src="{{ asset('public/global/scripts/metronic.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/assets/admin/layout2/scripts/layout.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('public/admin/pages/scripts/ecommerce-products-edit.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            Metronic.init();
+            Layout.init();
+            EcommerceProductsEdit.init();
+        });
+    </script>
+{% endblock %}
+

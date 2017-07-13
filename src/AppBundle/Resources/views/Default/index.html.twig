@@ -1,0 +1,98 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block body_id 'page-boxed page-header-fixed page-container-bg-solid page-sidebar-closed-hide-logo' %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="page-container">
+            {% if is_granted('ROLE_ADMIN') %}
+                <!-- BEGIN SIDEBAR -->
+                <div class="page-sidebar-wrapper">
+                    <div class="page-sidebar navbar-collapse collapse">
+                        <ul class="page-sidebar-menu page-sidebar-menu-hover-submenu " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+                            <li>
+                                <a href="{{ path('createUser') }}">
+                                    <i class="icon-user"></i>
+                                    <span class="title">Создать новый пользователь</span>
+                                    <span class="arrow "></span>
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- END SIDEBAR MENU -->
+                    </div>
+                </div>
+                <!-- END SIDEBAR -->
+            {% endif %}
+            <div class="page-content-wrapper">
+                <div class="page-content">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <!-- BEGIN CONDENSED TABLE PORTLET-->
+                            <div class="portlet box green">
+                                <div class="portlet-title">
+                                    <div class="caption">
+                                        <i class="fa fa-picture"></i>Таблица пользователей
+                                    </div>
+                                </div>
+                                <div class="portlet-body">
+                                    <div class="table-scrollable">
+                                        <table class="table table-condensed table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>{{ knp_pagination_sortable(users, 'Логин', 'u.username', {'defaultDirection' : 'desc'}) }}</th>
+                                                    <th>{{ knp_pagination_sortable(users, 'Имя', 'u.firstName', {'defaultDirection' : 'desc'}) }}</th>
+                                                    <th>{{ knp_pagination_sortable(users, 'Фамиля', 'u.lastName', {'defaultDirection' : 'desc'}) }}</th>
+                                                    <th>{{ knp_pagination_sortable(users, 'Дата Рождения', 'u.birthday', {'defaultDirection' : 'desc'}) }}</th>
+                                                    <th>{{ knp_pagination_sortable(users, 'Пол', 'u.gender', {'defaultDirection' : 'desc'}) }}</th>
+                                                    {% if is_granted('ROLE_ADMIN') %}
+                                                        <th>Удалить</th>
+                                                    {% endif %}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for user in users %}
+                                                    <tr>
+                                                        <td>{{ loop.index }}</td>
+                                                        <td>
+                                                            {% if is_granted('ROLE_ADMIN') %}
+                                                                <a href="{{ path('showUser', {'id': user.id }) }}">{{ user.username }}</a>
+                                                            {% else %}
+                                                                {{ user.username }}
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>{{ user.firstName }}</td>
+                                                        <td>{{ user.lastName }}</td>
+                                                        <td>{{ user.birthday|date('d/m/Y h:i') }}</td>
+                                                        <td>{{ user.gender }}</td>
+                                                        {% if is_granted('ROLE_ADMIN') %}
+                                                            <td>
+                                                                <form action="{{ path('deleteUser', {'id': user.id }) }}" method="post">
+                                                                    <button type="submit" class="btn default btn-xs black">
+                                                                        <i class="fa fa-trash-o"></i>&nbsp;Удалить</button>
+                                                                </form>
+                                                            </td>
+                                                        {% endif %}
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="dataTables_paginate paging_bootstrap_full_number">
+                                {{ knp_pagination_render(users, 'AppBundle:Pagination:paginate.html.twig',  {'users': users }, {'users': users|length } ) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
